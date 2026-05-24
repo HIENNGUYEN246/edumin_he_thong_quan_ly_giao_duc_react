@@ -1,5 +1,7 @@
 # Edumin React
 
+Link vercel: https://edumin-he-thong-quan-ly-giao-duc-re.vercel.app/
+
 ## Cách chạy
 
 1. Mở terminal trong thư mục `edumin_react`

@@ -148,12 +148,14 @@ class APIClient {
       openRegistrationsData: this.pickOpenRegistrations(payload),
       studentRegistrationsData: this.pickStudentRegistrations(payload),
       assignmentsData: this.pickAssignmentsData(payload),
+      documentsData: payload?.documentsData || [],
       courseList: [],
       classesData: [],
       coursesData: [],
       openRegistrations: [],
       studentRegistrations: [],
       assignments: [],
+      documents: [],
     };
   }
 
@@ -233,6 +235,18 @@ class APIClient {
     return [...map.values()];
   }
 
+  mergeDocumentsById(documentLists) {
+    const map = new Map();
+    for (const list of documentLists) {
+      if (!Array.isArray(list)) continue;
+      for (const doc of list) {
+        if (!doc?.id) continue;
+        map.set(doc.id, doc);
+      }
+    }
+    return [...map.values()];
+  }
+
   // Gộp mọi document trong API (tránh chỉ lấy bản mới thiếu admin)
   mergeRecords(records) {
     if (!records.length) {
@@ -262,6 +276,7 @@ class APIClient {
         records.map((r) => this.pickStudentRegistrations(r))
       ),
       assignmentsData: this.mergeAssignmentsById(records.map((r) => this.pickAssignmentsData(r))),
+      documentsData: this.mergeDocumentsById(records.map((r) => r.documentsData || [])),
     };
 
     const canonical = records.reduce((best, current) =>
